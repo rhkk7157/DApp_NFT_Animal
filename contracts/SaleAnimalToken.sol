@@ -14,6 +14,7 @@ contract SaleAnimalToken {
   mapping (uint256 => uint256) public animalTokenPrices;  // 가격관리 mapping (tokenId => price)
   uint256[] public onSaleAnimalTokenArray;  // 프론트에서 어떤게 판매중인 토큰인지 확인가능한 배열
 
+  // 판매
   function setForSaleAnimalToken(uint256 _animalTokenId, uint256 _price) public {
     address animalTokenOwner = mintAnimalTokenAddress.ownerOf(_animalTokenId);  
     
@@ -26,6 +27,7 @@ contract SaleAnimalToken {
     onSaleAnimalTokenArray.push(_animalTokenId);
   }
 
+  // 구매
   function purchaseAnimalToken(uint256 _animalTokenId) public payable {
     uint256 price = animalTokenPrices[_animalTokenId];
     address animalTokenOwner = mintAnimalTokenAddress.ownerOf(_animalTokenId);
