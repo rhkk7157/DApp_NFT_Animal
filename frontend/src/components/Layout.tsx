@@ -9,7 +9,7 @@ const Layout: FC = ({ children }) => {
         bg="purple.200"
         p={4}
         justifyContent="space-around"
-        alignContent="center"
+        alignItems="center"
       >
         <Box>
           <Text fontWeight="bold">joy Animals</Text>
@@ -29,7 +29,7 @@ const Layout: FC = ({ children }) => {
         direction="column"
         h="full"
         justifyContent="center"
-        alignContent="center"
+        alignItems="center"
       >
         {children}
       </Flex>
