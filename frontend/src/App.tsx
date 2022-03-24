@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Main from './routes/Main';
 import Layout from './components/Layout';
 import MyAnimal from './routes/my-animal';
+import SaleAnimal from './routes/sale-animal';
 
 const App: FC = () => {
   const [account, setAccount] = useState<string>('');
@@ -36,6 +37,10 @@ const App: FC = () => {
           <Route
             path="/my-animal"
             element={<MyAnimal account={account} />}
+          ></Route>
+          <Route
+            path="/sale-animal"
+            element={<SaleAnimal account={account} />}
           ></Route>
         </Routes>
       </Layout>
