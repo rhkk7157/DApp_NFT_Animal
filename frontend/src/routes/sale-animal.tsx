@@ -1,6 +1,7 @@
 import { Grid } from '@chakra-ui/react';
 import React, { FC, useEffect, useState } from 'react';
 import { IMyAnimalCard } from '../components/MyAnimalCard';
+import SaleAnimalCard from '../components/SaleAnimalCard';
 import { mintAnimalTokenContract, saleAnimalTokenContract } from '../contracts';
 
 interface SaleAnimalProps {
@@ -8,7 +9,9 @@ interface SaleAnimalProps {
 }
 
 const SaleAnimal: FC<SaleAnimalProps> = ({ account }) => {
-  const [saleAnimalCard, setSaleAnimalCard] = useState<IMyAnimalCard[]>();
+  const [saleAnimalCardArray, setSaleAnimalCardArray] = useState<
+    IMyAnimalCard[]
+  >();
   const getOnSaleAnimalTokens = async () => {
     try {
       const onSaleAnimalTokenLength = await saleAnimalTokenContract.methods
@@ -31,7 +34,7 @@ const SaleAnimal: FC<SaleAnimalProps> = ({ account }) => {
 
         tempOnSaleArray.push({ animalTokenId, animalType, animalPrice });
       }
-      setSaleAnimalCard(tempOnSaleArray);
+      setSaleAnimalCardArray(tempOnSaleArray);
     } catch (error) {
       console.error(error);
     }
@@ -41,11 +44,20 @@ const SaleAnimal: FC<SaleAnimalProps> = ({ account }) => {
     getOnSaleAnimalTokens();
   }, []);
 
-  useEffect(() => {
-    console.log(saleAnimalCard);
-  }, [saleAnimalCard]);
-
-  return <Grid mt={4} templateColumns="repeat(4, 1fr)" gap={8}></Grid>;
+  return (
+    <Grid mt={4} templateColumns="repeat(4, 1fr)" gap={8}>
+      {saleAnimalCardArray &&
+        saleAnimalCardArray.map((v, i) => {
+          return (
+            <SaleAnimalCard
+              key={i}
+              animalType={v.animalType}
+              animalPrice={v.animalPrice}
+            />
+          );
+        })}
+    </Grid>
+  );
 };
 
 export default SaleAnimal;
