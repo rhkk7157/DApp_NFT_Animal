@@ -1,6 +1,10 @@
 import { Box, Button, Text } from '@chakra-ui/react';
 import React, { FC, useEffect, useState } from 'react';
-import { mintAnimalTokenContract, web3 } from '../contracts';
+import {
+  mintAnimalTokenContract,
+  saleAnimalTokenContract,
+  web3
+} from '../contracts';
 import AnimalCard from './AnimalCard';
 
 interface SaleAnimalCardProps {
@@ -8,12 +12,14 @@ interface SaleAnimalCardProps {
   animalPrice: string;
   animalTokenId: string;
   account: string;
+  getOnSaleAnimalTokens: () => Promise<void>;
 }
 const SaleAnimalCard: FC<SaleAnimalCardProps> = ({
   animalType,
   animalPrice,
   animalTokenId,
-  account
+  account,
+  getOnSaleAnimalTokens
 }) => {
   const [isBuyable, setIsBuyable] = useState<boolean>(false);
 
@@ -31,6 +37,21 @@ const SaleAnimalCard: FC<SaleAnimalCardProps> = ({
     }
   };
 
+  const onClickBuy = async () => {
+    try {
+      if (!account) return;
+      const response = await saleAnimalTokenContract.methods
+        .purchaseAnimalToken(animalTokenId)
+        .send({ from: account, value: animalPrice });
+
+      if (response.status) {
+        getOnSaleAnimalTokens();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     getAnimalTokenOwner();
   }, []);
@@ -42,7 +63,13 @@ const SaleAnimalCard: FC<SaleAnimalCardProps> = ({
         <Text display="inline-block">
           {web3.utils.fromWei(animalPrice)} Matic
         </Text>
-        <Button size="sm" colorScheme="green" m={2} disabled={isBuyable}>
+        <Button
+          size="sm"
+          colorScheme="green"
+          m={2}
+          disabled={isBuyable}
+          onClick={onClickBuy}
+        >
           Buy
         </Button>
       </Box>
